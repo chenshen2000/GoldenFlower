@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扎金花</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        img {
+            width: 162px;
+            transition: transform 1s ease 0s;
+        }
+        #box{
+            width: 100%;
+            position: absolute;
+            background: url(https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.quanjing.com%2F9b%2Fmc%2FQJ6423817940.jpg%3Fx-oss-process%3Dstyle%2F794ws&refer=http%3A%2F%2Fpic.quanjing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1670047469&t=c166eb2963e48ece732f020888259934) no-repeat center center;
+            background-size: 100%;
+        }
+
+        #right{
+            width: 30%;
+            height: 700px;
+            /* background-color: green; */
+            float: right;
+        }
+        .backFirst{
+            position: absolute;
+            top: 50%;
+            left: 85%;
+            margin-top: -121px ;
+            margin-left: -81px;
+        }
+        .backSecond{
+            position: absolute;
+            top: 50%;
+            left: 85%;
+            margin-top: -141px ;
+            margin-left: -61px;
+        }
+        .backThird{
+            position: absolute;
+            top: 50%;
+            left: 85%;
+            margin-top: -161px ;
+            margin-left: -41px;
+            transition: left 0.6s linear 0s,top 0.6s linear 0s;
+        }
+        button:first-of-type{
+            width: 50px;
+            height: 30px;
+            position: absolute;
+            bottom: 10%;
+            right: 10%;
+        }
+        button:last-of-type{
+            width:60px;
+            height: 30px;
+            position: absolute;
+            bottom: 10%;
+            right:15%;
+        }
+        button:nth-of-type(2){
+            width:100px;
+            height: 30px;
+            position: absolute;
+            top: 10%;
+            right:15%;
+        }
+        #left{
+            width: 70%;
+            height: 600px;
+            float: left;
+        }
+        #left .up,
+        #left .down{
+            width: 100%;
+            height: 50%;
+            /* background-color: pink; */
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-around;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div id="left">
+            <div class="up">
+                <img class="first" src="./扑克牌图片/背面.png">
+                <img class="second" src="./扑克牌图片/背面.png">
+                <img class="third" src="./扑克牌图片/背面.png">
+            </div>
+            <div class="down">
+                <img class="first" src="./扑克牌图片/背面.png">
+                <img class="second" src="./扑克牌图片/背面.png">
+                <img class="third" src="./扑克牌图片/背面.png">
+            </div>
+        </div>
+        <div id="right">
+            <img src="./扑克牌图片/背面.png" class="backFirst">
+            <img src="./扑克牌图片/背面.png" class="backSecond">
+            <img src="./扑克牌图片/背面.png" class="backThird">
+            <button>发牌</button>
+            <button></button>
+            <button>自动开牌</button>
+        </div>
+    </div>
+    <span></span>
+</body>
+<script src="../jquery-1.8.3.min.js"></script>
+    <script>
+        //已经玩过的牌
+        var arr=[];
+        //剩余牌数
+        $("button:eq(1)").text("剩余牌数：54");
+        //随机获取54张牌中的一张
+        function Random(){
+            var flag=true;
+            var random;
+            while(flag)
+            {
+                flag=false;
+                random=Math.floor(Math.random()*54+1);
+                arr.forEach(item=>{
+                    if(item==random)
+                        flag=true;
+                })
+            }
+            arr.push(random);
+            $("button:eq(1)").text("剩余牌数："+(54-arr.length));
+            return random;
+        }
+        //点击翻牌
+        function start(){
+            $("#left img").unbind('click').bind("click",function(){
+                var random=Random();
+                $(this).css({"transform":"rotateY(360deg)"});
+                setTimeout(function(){
+                    $(this).attr("src","./扑克牌图片/downyi.com ("+ random +").jpg");
+                }.bind(this),400);
+                $(this).unbind("click");
+                if(arr.length==54) {
+                    setTimeout(function(){
+                        if(confirm("扑克牌已经发完！是否洗牌？"))
+                        {
+                            $("button:eq(1)").text("剩余牌数：54");
+                            $("#left img").css("visibility","hidden");
+                            arr.splice(0,arr.length);
+                        }
+                        else{
+                            $("span").css({
+                                "position":"fixed",
+                                "top":"0",
+                                "bottom":"0",
+                                "left":"0",
+                                "right":"0"
+                            });
+                        }
+                    },1000);
+                    // $("button").unbind("click");
+                }
+            })
+            // setTimeout(function(){
+            //     $("button:eq(0)").attr("disabled",false);;
+            // },600*($("#left img").length));
+        }
+        //开始隐藏牌
+        $("#left img").css("visibility","hidden");
+        //发牌
+        $("button:eq(0)").unbind("click").bind("click",function(){
+            $(this).attr("disabled",true); //发牌时禁用发牌按钮
+            $("button:eq(2)").attr("disabled",false);//发牌时启用自动开牌按钮
+             $("#left img").css({"visibility":"hidden","transform":""}).attr("src","./扑克牌图片/背面.png");
+             for(let i=0;i<$("#left img").length;i++)
+             {
+                let img;
+                if(i%2==0)
+                    img=$(".up img")[i/2];
+                else
+                    img=$(".down img")[(i-1)/2];
+                setTimeout(function(){
+                    $(".backThird").css({"top":img.offsetTop+"px","left":img.offsetLeft+"px","margin":"0px","transition-property":""});
+                    setTimeout(function(){
+                        $(".backThird").css({"top":"","left":"","margin":"","transition-property":"none"});
+                        $(img).css("visibility","visible");
+                    },590);
+                },600*i);
+             }
+            start();
+        })
+        //开始禁用自动开牌
+        $("button:eq(2)").attr("disabled",true);
+        // 自动翻牌
+        $("button:eq(2)").unbind("click").bind("click",function(){
+            $(this).attr("disabled",true);//自动开牌时禁用自动开牌按钮
+            for(let i=0;i<$("#left img").length;i++)
+             {
+                let img;
+                if(i%2==0)
+                    img=$(".up img")[i/2];
+                else
+                    img=$(".down img")[(i-1)/2];
+                setTimeout(function(){
+                    img.click();
+                },500*i);
+             }
+             setTimeout(function(){
+                $("button:eq(0)").attr("disabled",false);
+             },500*$("#left img").length);
+        })
+    </script>
+</html>
