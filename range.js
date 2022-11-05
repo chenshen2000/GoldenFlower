@@ -30,16 +30,16 @@ var queue=[];
 for (var i = 0; i <= 54; i++) {
         images[images.length] = new Image();
         images[images.length - 1].src = "./扑克牌图片/downyi.com (" + i + ").jpg";
-        imgLoad(images[images.length - 1], function () {
+        imgLoad(images[images.length - 1], function (a) {
              let b=new Date();
             queue.push(b-a);
         })
 }
 function imgLoad(img, callback) {
     let a=new Date();
-    var timer = setInterval(function () {
+    var timer = setInterval(function (a) {
         if (img.complete) {
-            callback(img)
+            callback(a)
             clearInterval(timer)
         }
     }, 1)
