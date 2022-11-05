@@ -51,7 +51,7 @@ var queueTime=setInterval(function(){
         $(".loading>div>div").css({"width":"300","transition":"width "+ time +"ms ease 0s"});
         $(".loading>div>span>span").text(count+"/55");
         setTimeout(function(){ 
-            $(".loading>div>div").css("width","0");
+            $(".loading>div>div").css({"width":"0","transition":""});
             queueFlag=true;
         },time);
         queueFlag=false;
