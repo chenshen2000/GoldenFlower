@@ -16,7 +16,7 @@ $(".loading").css({
     "top":"60%",
     "left":"50%","margin-left": "-150px",
 }).children("div").css({
-    "width":"300px","height":"50px",
+    "width":"0px","height":"50px",
     "background-color":"pink",
     "border-radius":"25px",
 }).next().css({
@@ -26,6 +26,7 @@ $(".loading").css({
 })
 var images = new Array(),a,b;
 var queue=[];
+// var queue=[29742, 30822, 30822, 37373, 42757, 44073, 44750, 45785, 47169, 48521, 49234, 50537, 51954, 52717, 53425, 54123, 54615, 56661, 57773, 60093, 60849, 62565, 63486, 64677, 65694, 67217, 68581, 69965, 70978, 72145, 73005, 74901, 75625, 76462, 77245, 78669, 79265, 80810, 82202, 83574, 84964, 85992, 86981, 87828, 88681, 90681, 92781, 94556, 95941, 96749, 100052]
 for (var i = 0; i <= 54; i++) {
         images[images.length] = new Image();
         images[images.length - 1].src = "./扑克牌图片/downyi.com (" + i + ").jpg";
@@ -43,14 +44,15 @@ function imgLoad(img, callback) {
         }
     }, 1)
 }
+
 var queueFlag=true,count=0;
 var queueTime=setInterval(function(){
     if(queue.length>0 && queueFlag==true)
     {   var time=queue.shift();
         count++;
         $(".loading>div>div").css({"width":"300","transition":"width "+ time +"ms ease 0s"});
-        $(".loading>div>span>span").text(count+"/55");
         setTimeout(function(){ 
+            $(".loading>div>span>span").text(count+"/55");
             $(".loading>div>div").css({"width":"0","transition":""});
             queueFlag=true;
         },time);
@@ -64,6 +66,6 @@ var queueTime=setInterval(function(){
             setTimeout(function(){
                 $(".loading").remove();
             },100);
-        },time*2);
+        },time+200);
     }
 },10)
